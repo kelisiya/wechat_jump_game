@@ -7,8 +7,10 @@ import time
 import os
 
 def pull_screenshot():
+
     os.system('adb shell screencap -p /sdcard/autojump.png')
     os.system('adb pull /sdcard/autojump.png .')
+
 
 def jump(distance):
     press_time = distance * 2.0

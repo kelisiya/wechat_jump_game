@@ -2,3 +2,6 @@ test/
 pic/
 screenshot_backups/
 autojump.png
+*.xml
+*.iml
+新手小白请使用这个代码  不需要使用真机的专用代码/wechat_jump.py
