@@ -9,7 +9,8 @@ from PIL import Image, ImageDraw
 import random
 import json
 import re
-
+import DQN
+import numpy as np
 
 # === 思路 ===
 # 核心：每次落稳之后截图，根据截图算出棋子的坐标和下一个块顶面的中点坐标，
@@ -333,19 +334,25 @@ def main():
 
     dump_device_info()
     check_adb()
+    n = 0
     while True:
         pull_screenshot()
         im = Image.open('./autojump.png')
         # 获取棋子和 board 的位置
+
         piece_x, piece_y, board_x, board_y = find_piece_and_board(im)
         ts = int(time.time())
         print(ts, piece_x, piece_y, board_x, board_y)
         set_button_position(im)
         jump(math.sqrt((board_x - piece_x) ** 2 + (board_y - piece_y) ** 2))
-        save_debug_creenshot(ts, im, piece_x, piece_y, board_x, board_y)
-        backup_screenshot(ts)
-        time.sleep(random.uniform(1.2, 1.4))   # 为了保证截图的时候应落稳了，多延迟一会儿
+        # save_debug_creenshot(ts, im, piece_x, piece_y, board_x, board_y)
+        # backup_screenshot(ts)
+        DQN.save_pic(np.asarray(im), str(n))
 
+        with open('time.txt','a+') as f:
+            f.write('%d,%f' % (n, math.sqrt((board_x - piece_x) ** 2 + (board_y - piece_y) ** 2)))
+        time.sleep(random.uniform(1.2, 1.4))  # 为了保证截图的时候应落稳了，多延迟一会儿
+        n += 1
 
 if __name__ == '__main__':
     main()
